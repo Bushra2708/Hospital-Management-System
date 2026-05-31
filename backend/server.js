@@ -18,32 +18,19 @@ connectDB();
 
 const app = express();
 
-const allowedOrigins = [
-  "http://localhost:5173",
-  process.env.FRONTEND_URL,
-];
 
-app.use(
-  cors({
-    origin: function (origin, callback) {
-      if (!origin) return callback(null, true);
-
-      if (allowedOrigins.includes(origin)) {
-        return callback(null, true);
-      }
-
-      callback(new Error("Not allowed by CORS"));
-    },
-    credentials: true,
-  })
-);
 
 app.use(express.json());
 app.use(cookieParser());
 
 // Static uploads
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
-
+app.use(
+  cors({
+    origin: true,
+    credentials: true,
+  })
+);
 // API Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/doctors", doctorRoutes);
